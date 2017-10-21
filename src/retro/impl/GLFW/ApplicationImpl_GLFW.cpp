@@ -10,6 +10,8 @@ namespace retro
             Log::error("Initialization of GLFW failed");
         }
 
+        Log::debug("Initialized GLFW");
+
         // Set a OpenGL 4.1 Core context
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
@@ -24,6 +26,8 @@ namespace retro
             glfwTerminate();
             Log::error("Creation of a window failed");
         }
+
+        Log::debug("Created a window");
 
         int left;
         int top;
@@ -40,14 +44,17 @@ namespace retro
 
         // Activate the context of the window for rendering
         glfwMakeContextCurrent(window);
+        Log::debug("Activated the window context");
 
         // Load all GL extensions
         gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+        Log::debug("Loaded GL extensions");
     }
 
     ApplicationImpl_GLFW::~ApplicationImpl_GLFW()
     {
         glfwTerminate();
+        Log::debug("Terminated GLFW");
     }
 
     bool ApplicationImpl_GLFW::isRunning()

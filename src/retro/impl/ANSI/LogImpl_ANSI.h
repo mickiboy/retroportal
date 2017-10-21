@@ -10,6 +10,6 @@ namespace retro
         LogImpl_ANSI();
         virtual ~LogImpl_ANSI() = default;
 
-        void log(LogType type, const std::string& message) override;
+        void log(LogType type, const std::string& timeAsString, const std::string& message) override;
     };
 }

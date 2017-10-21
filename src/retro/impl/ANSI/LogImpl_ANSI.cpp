@@ -26,8 +26,9 @@ namespace retro
 #endif
     }
 
-    void LogImpl_ANSI::log(LogType type, const std::string& message)
+    void LogImpl_ANSI::log(LogType type, const std::string& timeAsString, const std::string& message)
     {
+        std::string colorSequence;
         std::string typeAsString;
 
         switch (type) {
@@ -36,14 +37,16 @@ namespace retro
                 break;
 
             case LogType::Warning:
-                typeAsString = "\x1b[33m[Warning]";
+                colorSequence = "\x1b[33m";
+                typeAsString = "[Warning]";
                 break;
 
             case LogType::Error:
-                typeAsString = "\x1b[31m[Error]";
+                colorSequence = "\x1b[31m";
+                typeAsString = "[Error]";
                 break;
         }
 
-        std::cout << typeAsString << ' ' << message << "\x1b[0m\n";
+        std::cout << colorSequence << timeAsString << ' ' << typeAsString << ' ' << message << "\x1b[0m\n";
     }
 }

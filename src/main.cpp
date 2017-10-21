@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
         renderer.swapBuffers();
     }
 
-    retro::Log::shutdown();
+    atexit(retro::Log::shutdown);
 
     return 0;
 }

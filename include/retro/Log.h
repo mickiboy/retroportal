@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <memory>
 #include <string>
 
@@ -62,6 +63,7 @@ namespace retro
 
     private:
         static std::shared_ptr<Impl> impl;
+        static std::chrono::high_resolution_clock::time_point startTime;
 
         Log() = default;
 
@@ -71,7 +73,7 @@ namespace retro
         public:
             virtual ~Impl() = default;
 
-            virtual void log(LogType type, const std::string& message) = 0;
+            virtual void log(LogType type, const std::string& timeAsString, const std::string& message) = 0;
         };
     };
 }
