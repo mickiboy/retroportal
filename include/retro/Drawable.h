@@ -4,6 +4,7 @@ namespace retro
 {
     class Mesh;
     class ShaderProgram;
+    class Texture;
 
     /**
      * A drawable is an abstract class, which the Renderer uses for drawing objects.
@@ -15,5 +16,6 @@ namespace retro
 
         virtual Mesh& getMesh() = 0;
         virtual ShaderProgram& getShaderProgram() = 0;
+        virtual Texture& getTexture() = 0;
     };
 }

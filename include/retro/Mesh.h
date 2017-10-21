@@ -5,9 +5,9 @@
 namespace retro
 {
     /**
-     * Vertex structure with 2 attributes.
+     * Vertex structure with 3 attributes.
      *
-     * Those attributes are: Position (3 elements, xyz) and Color (4 elements, rgba).
+     * Those attributes are: Position (3 elements, xyz), color (4 elements, rgba) and texture (2 elements, uv).
      */
     struct Vertex
     {
@@ -19,6 +19,9 @@ namespace retro
         float g = 0.0f;
         float b = 0.0f;
         float a = 0.0f;
+
+        float u = 0.0f;
+        float v = 0.0f;
     };
 
     /**

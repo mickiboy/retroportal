@@ -18,10 +18,6 @@ include_directories(
 )
 
 set(SOURCE_FILES
-    ${CMAKE_SOURCE_DIR}/extlibs/libretro-common/dynamic/dylib.c
-
-    ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/glad.c
-
     ${CMAKE_SOURCE_DIR}/src/retro/Application.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GLFW/ApplicationImpl_GLFW.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GLFW/ApplicationImpl_GLFW.h
 
@@ -36,10 +32,16 @@ set(SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/src/retro/Renderer.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/RendererImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/RendererImpl_GL.h
 
+    ${CMAKE_SOURCE_DIR}/src/retro/Texture.cpp
+    ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/TextureImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/TextureImpl_GL.h
+
     ${CMAKE_SOURCE_DIR}/src/retro/ShaderProgram.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/ShaderProgramImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/ShaderProgramImpl_GL.h
 
     ${CMAKE_SOURCE_DIR}/src/main.cpp
+
+    ${CMAKE_SOURCE_DIR}/extlibs/libretro-common/dynamic/dylib.c
+    ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/glad.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
