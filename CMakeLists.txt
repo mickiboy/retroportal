@@ -7,17 +7,25 @@ set(GLFW_BUILD_DOCS OFF)
 set(GLFW_INSTALL OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extlibs/glfw)
 
+add_definitions(-DHAVE_DYNAMIC)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/extlibs/glfw/include
+    ${CMAKE_SOURCE_DIR}/extlibs/glm
+    ${CMAKE_SOURCE_DIR}/extlibs/libretro-common/include
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
 )
 
 set(SOURCE_FILES
+    ${CMAKE_SOURCE_DIR}/extlibs/libretro-common/dynamic/dylib.c
+
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/glad.c
 
     ${CMAKE_SOURCE_DIR}/src/retro/Application.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GLFW/ApplicationImpl_GLFW.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GLFW/ApplicationImpl_GLFW.h
+
+    ${CMAKE_SOURCE_DIR}/src/retro/Core.cpp
 
     ${CMAKE_SOURCE_DIR}/src/retro/Log.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/ANSI/LogImpl_ANSI.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/ANSI/LogImpl_ANSI.h
