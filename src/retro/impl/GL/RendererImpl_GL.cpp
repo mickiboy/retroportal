@@ -13,8 +13,21 @@ namespace retro
 {
     RendererImpl_GL::RendererImpl_GL(Application& app) : app(app)
     {
+        int width;
+        int height;
+        app.getSize(&width, &height);
+
         // Set black as a clearing color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+        // Set the viewport to the client size of the window
+        glViewport(0, 0, width, height);
+
+        model = glm::mat4(1.0f);
+        view = glm::mat4(1.0f);
+        projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, 0.0f, 1.0f);
+
+        app.addResizeEventReceiver(this);
     }
 
     void RendererImpl_GL::clear()
@@ -29,23 +42,16 @@ namespace retro
         auto shaderProgramImpl = drawable.getShaderProgram().getImpl<ShaderProgramImpl_GL>();
         auto textureImpl = drawable.getTexture().getImpl<TextureImpl_GL>();
 
-        glBindTexture(GL_TEXTURE_2D, textureImpl->id);
+        if (textureImpl->id != 0) {
+            glBindTexture(GL_TEXTURE_2D, textureImpl->id);
+        }
 
         // Bind the shader program
         glUseProgram(shaderProgramImpl->id);
 
-        glm::mat4 model(1.0f);
-        auto modelLoc = glGetUniformLocation(shaderProgramImpl->id, "u_model");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-        glm::mat4 view(1.0f);
-        auto viewLoc = glGetUniformLocation(shaderProgramImpl->id, "u_view");
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-        glm::mat4 projection(1.0f);
-        projection = glm::ortho(0.0f, 1280.0f, 720.0f, 0.0f, 0.0f, 1.0f);
-        auto projectionLoc = glGetUniformLocation(shaderProgramImpl->id, "u_projection");
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramImpl->id, "u_model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramImpl->id, "u_view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramImpl->id, "u_projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Draw the object
         glBindVertexArray(meshImpl->vao);
@@ -56,5 +62,12 @@ namespace retro
     void RendererImpl_GL::swapBuffers()
     {
         app.getImpl<ApplicationImpl_GLFW>()->swapBuffers();
+    }
+
+    void RendererImpl_GL::onResize(int width, int height)
+    {
+        glViewport(0, 0, width, height);
+
+        projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, 0.0f, 1.0f);
     }
 }

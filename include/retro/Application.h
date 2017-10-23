@@ -5,6 +5,8 @@
 
 namespace retro
 {
+    class ResizeEventReceiver;
+
     /**
      * An application holds a window and is able to poll platform events.
      */
@@ -24,10 +26,14 @@ namespace retro
 
         ~Application();
 
+        void addResizeEventReceiver(ResizeEventReceiver* receiver);
+
         /**
          * Returns the current implementation.
          */
         template<typename T> T* getImpl();
+
+        void getSize(int* width, int* height);
 
         /**
          * Checks if the application is still running.
@@ -48,8 +54,16 @@ namespace retro
         public:
             virtual ~Impl() = default;
 
+            virtual void addResizeEventReceiver(ResizeEventReceiver* receiver) = 0;
+            virtual void getSize(int* width, int* height) = 0;
             virtual bool isRunning() = 0;
             virtual void pollEvents() = 0;
         };
+    };
+
+    class ResizeEventReceiver
+    {
+    public:
+        virtual void onResize(int width, int height) = 0;
     };
 }

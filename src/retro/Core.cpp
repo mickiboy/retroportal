@@ -7,13 +7,51 @@ namespace retro
 {
     Core* Core::instance = nullptr;
 
-    Core::Core(const std::string& path) : shaderProgram(ui::shaders::vertex::positionColorTexture, ui::shaders::fragment::colorTexture)
+    const std::string& vertexShaderCode =
+        "#version 410 core\n"
+        ""
+        "layout (location = 0) in vec3 a_pos;"
+        "layout (location = 1) in vec4 a_color;"
+        "layout (location = 2) in vec2 a_texCoord;"
+        ""
+        "out vec2 v_texCoord;"
+        ""
+        "uniform mat4 u_model;"
+        "uniform mat4 u_view;"
+        "uniform mat4 u_projection;"
+        ""
+        "void main()"
+        "{"
+        "    gl_Position = u_projection * u_view * u_model * vec4(a_pos, 1.0);"
+        "    v_texCoord = a_texCoord;"
+        "}";
+
+    const std::string& fragmentShaderCode =
+        "#version 410 core\n"
+        ""
+        "in vec2 v_texCoord;"
+        ""
+        "out vec4 f_fragColor;"
+        ""
+        "uniform sampler2D u_tex;"
+        ""
+        "void main()"
+        "{"
+        "    f_fragColor = texture(u_tex, v_texCoord);"
+        "}";
+
+    Core::Core(const std::string& path) : shaderProgram(vertexShaderCode, fragmentShaderCode)
     {
         instance = this;
 
         handle = dylib_load(path.c_str());
         if (!handle) {
-            Log::error(dylib_error());
+            std::ostringstream ss;
+            ss << "Core library could not be loaded: " << dylib_error();
+
+            Log::error(ss.str());
+
+            return;
         }
 
         Log::debug("Loaded core library");
@@ -47,15 +85,14 @@ namespace retro
         Log::debug("Loaded core functions");
 
         retroSetEnvironment(onRetroEnvironment);
-
-        retroInit();
-        Log::debug("Initialized core");
-
         retroSetVideoRefresh(onRetroVideoRefresh);
         retroSetAudioSample(onRetroAudioSample);
         retroSetAudioSampleBatch(onRetroAudioSampleBatch);
         retroSetInputPoll(onRetroInputPoll);
         retroSetInputState(onRetroInputState);
+
+        retroInit();
+        Log::debug("Initialized core");
 
         retro_system_info systemInfo;
         retroGetSystemInfo(&systemInfo);
@@ -123,10 +160,10 @@ namespace retro
         sampleRate << "Sample rate: " << std::to_string(avInfo.timing.sample_rate);
         Log::debug(sampleRate.str());
 
-        Vertex topLeft = { 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f };
-        Vertex topRight = { static_cast<float>(avInfo.geometry.base_width), 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f };
-        Vertex bottomRight = { static_cast<float>(avInfo.geometry.base_width), static_cast<float>(avInfo.geometry.base_height), 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
-        Vertex bottomLeft = { 0.0f, static_cast<float>(avInfo.geometry.base_height), 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f };
+        Vertex topLeft = { {}, {}, {} };
+        Vertex topRight = { { static_cast<float>(avInfo.geometry.base_width), 0.0f, 0.0f }, {}, { 1.0f, 0.0f } };
+        Vertex bottomRight = { { static_cast<float>(avInfo.geometry.base_width), static_cast<float>(avInfo.geometry.base_height), 0.0f }, {}, { 1.0f, 1.0f } };
+        Vertex bottomLeft = { { 0.0f, static_cast<float>(avInfo.geometry.base_height), 0.0f }, {}, { 0.0f, 1.0f } };
 
         mesh.addVertex(topLeft);
         mesh.addVertex(topRight);

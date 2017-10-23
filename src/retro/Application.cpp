@@ -12,12 +12,22 @@ namespace retro
         impl.reset();
     }
 
+    void Application::addResizeEventReceiver(ResizeEventReceiver* receiver)
+    {
+        impl->addResizeEventReceiver(receiver);
+    }
+
     template<typename T> T* Application::getImpl()
     {
         return static_cast<T*>(impl.get());
     }
 
     template ApplicationImpl_GLFW* Application::getImpl<ApplicationImpl_GLFW>();
+
+    void Application::getSize(int* width, int* height)
+    {
+        impl->getSize(width, height);
+    }
 
     bool Application::isRunning()
     {

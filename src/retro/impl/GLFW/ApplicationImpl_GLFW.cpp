@@ -4,10 +4,16 @@
 
 namespace retro
 {
+    ApplicationImpl_GLFW* ApplicationImpl_GLFW::instance = nullptr;
+
     ApplicationImpl_GLFW::ApplicationImpl_GLFW(int width, int height, const std::string& title)
     {
+        instance = this;
+
         if (!glfwInit()) {
             Log::error("Initialization of GLFW failed");
+
+            return;
         }
 
         Log::debug("Initialized GLFW");
@@ -16,9 +22,6 @@ namespace retro
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        // Window should not be resizable
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         // Create a window
         window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
@@ -49,12 +52,26 @@ namespace retro
         // Load all GL extensions
         gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
         Log::debug("Loaded GL extensions");
+
+        glfwSetFramebufferSizeCallback(window, OnFramebufferSize);
     }
 
     ApplicationImpl_GLFW::~ApplicationImpl_GLFW()
     {
         glfwTerminate();
         Log::debug("Terminated GLFW");
+
+        instance = nullptr;
+    }
+
+    void ApplicationImpl_GLFW::addResizeEventReceiver(ResizeEventReceiver* receiver)
+    {
+        resizeEventReceivers.push_back(receiver);
+    }
+
+    void ApplicationImpl_GLFW::getSize(int* width, int* height)
+    {
+        glfwGetWindowSize(window, width, height);
     }
 
     bool ApplicationImpl_GLFW::isRunning()
@@ -70,5 +87,14 @@ namespace retro
     void ApplicationImpl_GLFW::swapBuffers()
     {
         glfwSwapBuffers(window);
+    }
+
+    void ApplicationImpl_GLFW::OnFramebufferSize(GLFWwindow* window, int width, int height)
+    {
+        for (auto receiver : instance->resizeEventReceivers) {
+            if (receiver) {
+                receiver->onResize(width, height);
+            }
+        }
     }
 }
