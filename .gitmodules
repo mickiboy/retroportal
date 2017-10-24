@@ -7,3 +7,6 @@
 [submodule "extlibs/libretro-common"]
 	path = extlibs/libretro-common
 	url = https://github.com/libretro/libretro-common.git
+[submodule "extlibs/libsoundio"]
+	path = extlibs/libsoundio
+	url = https://github.com/andrewrk/libsoundio.git

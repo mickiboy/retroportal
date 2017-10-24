@@ -7,12 +7,17 @@ set(GLFW_BUILD_DOCS OFF)
 set(GLFW_INSTALL OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extlibs/glfw)
 
+set(BUILD_EXAMPLE_PROGRAMS OFF)
+set(BUILD_TESTS OFF)
+add_subdirectory(${CMAKE_SOURCE_DIR}/extlibs/libsoundio)
+
 add_definitions(-DHAVE_DYNAMIC)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/extlibs/glfw/include
     ${CMAKE_SOURCE_DIR}/extlibs/glm
     ${CMAKE_SOURCE_DIR}/extlibs/libretro-common/include
+    ${CMAKE_SOURCE_DIR}/extlibs/libsoundio
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/src
 )
@@ -45,4 +50,6 @@ set(SOURCE_FILES
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} glfw)
+target_link_libraries(${PROJECT_NAME} glfw libsoundio_shared ${LIBSOUNDIO_LIBS})
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${libsoundio_BINARY_DIR}/soundio.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>)

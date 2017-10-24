@@ -1,5 +1,4 @@
 #include <retro/Application.h>
-#include <retro/Core.h>
 #include <retro/Log.h>
 #include <retro/Renderer.h>
 
