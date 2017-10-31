@@ -1,3 +1,6 @@
+[submodule "extlibs/cef-project"]
+	path = extlibs/cef-project
+	url = https://bitbucket.org/chromiumembedded/cef-project.git
 [submodule "extlibs/glfw"]
 	path = extlibs/glfw
 	url = https://github.com/glfw/glfw.git
