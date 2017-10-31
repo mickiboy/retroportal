@@ -28,6 +28,8 @@ set(SOURCE_FILES
 
     ${CMAKE_SOURCE_DIR}/src/retro/Core.cpp
 
+    ${CMAKE_SOURCE_DIR}/src/retro/Event.cpp
+
     ${CMAKE_SOURCE_DIR}/src/retro/Log.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/ANSI/LogImpl_ANSI.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/ANSI/LogImpl_ANSI.h
 
@@ -37,11 +39,11 @@ set(SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/src/retro/Renderer.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/RendererImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/RendererImpl_GL.h
 
-    ${CMAKE_SOURCE_DIR}/src/retro/Texture.cpp
-    ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/TextureImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/TextureImpl_GL.h
-
     ${CMAKE_SOURCE_DIR}/src/retro/ShaderProgram.cpp
     ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/ShaderProgramImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/ShaderProgramImpl_GL.h
+
+    ${CMAKE_SOURCE_DIR}/src/retro/Texture.cpp
+    ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/TextureImpl_GL.cpp ${CMAKE_SOURCE_DIR}/src/retro/impl/GL/TextureImpl_GL.h
 
     ${CMAKE_SOURCE_DIR}/src/main.cpp
 

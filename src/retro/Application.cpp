@@ -12,11 +12,6 @@ namespace retro
         impl.reset();
     }
 
-    void Application::addResizeEventReceiver(ResizeEventReceiver* receiver)
-    {
-        impl->addResizeEventReceiver(receiver);
-    }
-
     template<typename T> T* Application::getImpl()
     {
         return static_cast<T*>(impl.get());

@@ -2,11 +2,13 @@
 
 #include <glm/glm.hpp>
 #include <retro/Application.h>
+#include <retro/Event.h>
 #include <retro/Renderer.h>
 
 namespace retro
 {
-    class RendererImpl_GL : public Renderer::Impl, public ResizeEventReceiver
+    class RendererImpl_GL : public Renderer::Impl,
+        public Receiver<events::Resize>
     {
     public:
         RendererImpl_GL(Application& app);
@@ -16,7 +18,7 @@ namespace retro
         void draw(Drawable& drawable) override;
         void swapBuffers() override;
 
-        void onResize(int width, int height) override;
+        void receiveEvent(const events::Resize& e) override;
 
     private:
         Application& app;

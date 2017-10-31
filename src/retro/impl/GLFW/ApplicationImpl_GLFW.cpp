@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <retro/Event.h>
 #include <retro/Log.h>
 #include "ApplicationImpl_GLFW.h"
 
@@ -53,7 +54,7 @@ namespace retro
         gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
         Log::debug("Loaded GL extensions");
 
-        glfwSetFramebufferSizeCallback(window, OnFramebufferSize);
+        glfwSetFramebufferSizeCallback(window, onFramebufferSize);
     }
 
     ApplicationImpl_GLFW::~ApplicationImpl_GLFW()
@@ -62,11 +63,6 @@ namespace retro
         Log::debug("Terminated GLFW");
 
         instance = nullptr;
-    }
-
-    void ApplicationImpl_GLFW::addResizeEventReceiver(ResizeEventReceiver* receiver)
-    {
-        resizeEventReceivers.push_back(receiver);
     }
 
     void ApplicationImpl_GLFW::getSize(int* width, int* height)
@@ -89,12 +85,8 @@ namespace retro
         glfwSwapBuffers(window);
     }
 
-    void ApplicationImpl_GLFW::OnFramebufferSize(GLFWwindow* window, int width, int height)
+    void ApplicationImpl_GLFW::onFramebufferSize(GLFWwindow* window, int width, int height)
     {
-        for (auto receiver : instance->resizeEventReceivers) {
-            if (receiver) {
-                receiver->onResize(width, height);
-            }
-        }
+        EventManager::notify<events::Resize>(width, height);
     }
 }

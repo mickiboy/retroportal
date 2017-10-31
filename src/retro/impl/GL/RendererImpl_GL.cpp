@@ -26,8 +26,6 @@ namespace retro
         model = glm::mat4(1.0f);
         view = glm::mat4(1.0f);
         projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, 0.0f, 1.0f);
-
-        app.addResizeEventReceiver(this);
     }
 
     void RendererImpl_GL::clear()
@@ -64,10 +62,10 @@ namespace retro
         app.getImpl<ApplicationImpl_GLFW>()->swapBuffers();
     }
 
-    void RendererImpl_GL::onResize(int width, int height)
+    void RendererImpl_GL::receiveEvent(const events::Resize& e)
     {
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, e.width, e.height);
 
-        projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, 0.0f, 1.0f);
+        projection = glm::ortho(0.0f, static_cast<float>(e.width), static_cast<float>(e.height), 0.0f, 0.0f, 1.0f);
     }
 }
